@@ -14,15 +14,15 @@ const config = {
 const pool = new Pool(config);
 
 
-let cohortName = `${process.argv[2]}%`;
-let limit = process.argv[3];
+let cohortName = `%${process.argv[2]}%`;
+let limit = process.argv[3] || 5;
 
 pool.query(`
 SELECT students.id as id, students.name as name, cohorts.name as cohort_name
 FROM students
 JOIN cohorts ON cohorts.id = students.cohort_id
 WHERE cohorts.name LIKE $1
-LIMIT ${'$2' || 5};
+LIMIT $2;
 `, [cohortName, limit])
 .then(res => {
   res.rows.forEach(user => {
